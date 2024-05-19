@@ -53,7 +53,7 @@ Open a web browser and navigate to:
 
 ## Run Unit Tests
 
-To run unit tests, run the command `pytest`.
+To run unit tests, we first need to install `pytest` and  `pytest-django` using `pip install pytest pytest-django` and then run the command `pytest`.
 
 <a  name="tech-stack"></a>
 
