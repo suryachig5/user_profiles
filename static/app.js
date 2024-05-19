@@ -20,7 +20,6 @@ async function fetchUserData() {
     }
 }
 
-
 function createVRButton(renderer) {
     const button = document.createElement('button');
 
@@ -46,14 +45,9 @@ function createVRButton(renderer) {
         button.style.width = '100px';
 
         button.textContent = 'ENTER VR';
-        button.onmouseenter = function () {
-            button.style.opacity = '1.0';
-        };
-        button.onmouseleave = function () {
-            button.style.opacity = '0.5';
-        };
-
-        button.onclick = function () {
+        button.onmouseenter = () => button.style.opacity = '1.0';
+        button.onmouseleave = () => button.style.opacity = '0.5';
+        button.onclick = () => {
             if (currentSession === null) {
                 navigator.xr.requestSession('immersive-vr').then(onSessionStarted);
             } else {
@@ -81,7 +75,7 @@ function createVRButton(renderer) {
     }
 
     if ('xr' in navigator) {
-        navigator.xr.isSessionSupported('immersive-vr').then(function (supported) {
+        navigator.xr.isSessionSupported('immersive-vr').then(supported => {
             if (supported) {
                 showEnterVR();
             } else {
@@ -95,11 +89,9 @@ function createVRButton(renderer) {
 
 function init() {
     const container = document.getElementById('container');
-    console.log('surya container', container)
 
     // Three.js setup
     const scene = new THREE.Scene();
-    console.log('surya scene', scene)
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
     camera.position.set(0, 0, 30);
 
@@ -125,33 +117,31 @@ function init() {
     // Raycaster for interaction
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
-    
     let intersectedObject = null;
 
     // Load font once
     const fontLoader = new THREE.FontLoader();
-    fontLoader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', async function (loadedFont) {
+    fontLoader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', async (loadedFont) => {
         font = loadedFont;
-
         const users = await fetchUserData();
-        createUserCoins(users, scene);
+        createUserSpheres(users, scene);
     });
 
-    function createUserCoins(users, scene) {
+    // Create user spheres
+    function createUserSpheres(users, scene) {
         users.forEach((user, index) => {
-            const geometry = new THREE.CylinderGeometry(3, 3, 1, 82);
+            const geometry = new THREE.SphereGeometry(3, 32, 32);
             const material = new THREE.MeshToonMaterial({
                 color: gray,
                 transparent: true,
                 opacity: 0.3
             });
-            const userCoin = new THREE.Mesh(geometry, material);
+            const userSphere = new THREE.Mesh(geometry, material);
 
-            userCoin.position.set(index * 10 - 20, 0, 0);
-            userCoin.rotation.x = Math.PI / 2; // Rotate the cylinder to have the top face the camera
-            userCoin.userData = { user }; // Attach user data to the userCoin
+            userSphere.position.set(index * 10 - 20, 0, 0);
+            userSphere.userData = { user }; // Attach user data to the userSphere
 
-            // Add initials to the userCoin
+            // Add initials to the userSphere
             const initials = `${user.name.first.charAt(0)}${user.name.last.charAt(0)}`;
             const textGeometry = new THREE.TextGeometry(initials, {
                 font: font,
@@ -163,15 +153,15 @@ function init() {
 
             textGeometry.computeBoundingBox();
             const textOffsetX = (textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x) / -2;
-            textMesh.rotation.x = -Math.PI / 2; // Rotate text to lie flat on the face of userCoin
-            textMesh.position.set(textOffsetX, 0, 0.51); // Adjust the position to ensure it's centered on the face of userCoin
+            textMesh.position.set(textOffsetX, 0, 0.51); // Adjust the position to ensure it's centered on the face of userSphere
 
-            userCoin.add(textMesh);
-            scene.add(userCoin);
-            coins.push(userCoin); // Add userCoin to the array
+            userSphere.add(textMesh);
+            scene.add(userSphere);
+            coins.push(userSphere); // Add userSphere to the array
         });
     }
 
+    // Create a user details card
     function createUserDetailsCard(user, scene) {
         const { dob, email, location, name, phone } = user;
         const { city, postcode, state, street } = location;
@@ -209,7 +199,6 @@ function init() {
             const textMesh = new THREE.Mesh(textGeometry, textMaterial);
 
             textGeometry.computeBoundingBox();
-            // Adjust the X position for left alignment
             const cardWidth = cardGeometry.parameters.width;
             const halfCardWidth = cardWidth / 2;
             const margin = 1;
@@ -235,8 +224,8 @@ function init() {
         loadModel('assets/spiderman.glb', modelStartPosition, 2, scene, modelEndPosition);
 
         // Animate the coins to move down
-        coins.forEach((userCoin) => {
-            new TWEEN.Tween(userCoin.position)
+        coins.forEach((userSphere) => {
+            new TWEEN.Tween(userSphere.position)
                 .to({ y: -7 }, animationTime)
                 .easing(TWEEN.Easing.Elastic.Out)
                 .start();
@@ -264,6 +253,7 @@ function init() {
         });
     }
 
+    // Animation loop
     function animate() {
         renderer.setAnimationLoop(() => {
             controls.update();
@@ -288,6 +278,7 @@ function init() {
         });
     }
 
+    // Event listeners for mouse interaction
     function onMouseMove(event) {
         mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -305,4 +296,4 @@ function init() {
     animate();
 }
 
-module.exports = { fetchUserData }; 
+module.exports = { fetchUserData };

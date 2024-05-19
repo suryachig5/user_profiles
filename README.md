@@ -57,7 +57,7 @@ This is simple and straight forward application that fetches user data from http
 
 ## Run Unit Tests
 
-To run unit tests, run the command `npm test`.  
+To run unit tests, run the command `pytest`.  
 
 <a  name="tech-stack"></a>
 
