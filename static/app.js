@@ -152,8 +152,9 @@ function init() {
             const textMesh = new THREE.Mesh(textGeometry, textMaterial);
 
             textGeometry.computeBoundingBox();
-            const textOffsetX = (textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x) / -2;
-            textMesh.position.set(textOffsetX, 0, 0.51); // Adjust the position to ensure it's centered on the face of userSphere
+            const textOffsetX = -0.5 * (textGeometry.boundingBox.max.x - textGeometry.boundingBox.min.x);
+            const textOffsetY = -0.5 * (textGeometry.boundingBox.max.y - textGeometry.boundingBox.min.y);
+            textMesh.position.set(textOffsetX, textOffsetY, 0.51);
 
             userSphere.add(textMesh);
             scene.add(userSphere);
@@ -295,5 +296,3 @@ function init() {
 
     animate();
 }
-
-module.exports = { fetchUserData };
