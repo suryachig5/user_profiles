@@ -1,4 +1,3 @@
-
 # user_profiles
 
 ## Table of Contents
@@ -18,51 +17,47 @@
 
 This is simple and straight forward application that fetches user data from https://randomuser.me/ and displays them in an interactive 3D environment.
 
-  
-
 <a  name="getting-started"></a>
 
 ## Getting Started
 
 ### Prerequisites
+If you don't have python already installed you can use Homebrew to install it:
 
--   Python 3.12
--   Node.js and npm
+ - `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+`
+ - `brew install python`
+ - `brew install pipenv` -- this is a tool to manage Python project dependencies.
 
-###  Setup
+### Setup
 
 1.  **Clone the repository:**
-    
-    `git clone https://github.com/suryachig5/user_profiles.git` 
-    `cd user_profiles`
-    
+
+`git clone https://github.com/suryachig5/user_profiles.git` then cd into the folder `cd user_profiles`
+
 2.  **Set up a virtual environment:**
-    
-    `python -m venv venv
-    source venv/bin/activate` 
-    
-3.  **Run migrations:**
-    
-    `python manage.py migrate` 
-    
-4.  **Start the Django server:**
-    
-    `python manage.py runserver` 
-    
-    Open a web browser and navigate to:
-    
-    `http://127.0.0.1:8000/static/index.html`
+
+`pipenv install django djangorestframework requests`
+
+`pipenv shell`
+
+3.  **Start the Django server:**
+
+`python manage.py runserver`
+
+Open a web browser and navigate to:
+
+`http://127.0.0.1:8000/static/index.html`
 
 <a  name="run-unit-tests"></a>
 
 ## Run Unit Tests
 
-To run unit tests, run the command `pytest`.  
+To run unit tests, run the command `pytest`.
 
 <a  name="tech-stack"></a>
 
 ## Tech Stack
 
 * Three.js
-
 * Django
