@@ -1,4 +1,4 @@
-let coins = [];
+let spheres = [];
 let currentCard = null;
 let currentModel = null;
 let font;
@@ -158,7 +158,7 @@ function init() {
 
             userSphere.add(textMesh);
             scene.add(userSphere);
-            coins.push(userSphere); // Add userSphere to the array
+            spheres.push(userSphere); // Add userSphere to the array
         });
     }
 
@@ -224,8 +224,8 @@ function init() {
         const modelEndPosition = new THREE.Vector3(card.position.x - cardGeometry.parameters.width / 2 - margin, 5, 0); // End position next to the card
         loadModel('assets/spiderman.glb', modelStartPosition, 2, scene, modelEndPosition);
 
-        // Animate the coins to move down
-        coins.forEach((userSphere) => {
+        // Animate the spheres to move down
+        spheres.forEach((userSphere) => {
             new TWEEN.Tween(userSphere.position)
                 .to({ y: -7 }, animationTime)
                 .easing(TWEEN.Easing.Elastic.Out)
